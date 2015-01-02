@@ -14395,12 +14395,12 @@ Low profile connectors, straight&lt;p&gt;
 <wire x1="18.5" y1="8.5" x2="18.5" y2="-8.5" width="0.127" layer="21"/>
 <wire x1="18.5" y1="-8.5" x2="-18.5" y2="-8.5" width="0.127" layer="21"/>
 <wire x1="-18.5" y1="-8.5" x2="-18.5" y2="8.5" width="0.127" layer="21"/>
-<pad name="KEY" x="16.51" y="6.35" drill="0.8"/>
-<pad name="RXD" x="16.51" y="3.81" drill="0.8"/>
-<pad name="TXD" x="16.51" y="1.27" drill="0.8"/>
-<pad name="+5V" x="16.51" y="-1.27" drill="0.8"/>
-<pad name="+3.3V" x="16.51" y="-3.81" drill="0.8"/>
-<pad name="GND" x="16.51" y="-6.35" drill="0.8"/>
+<pad name="KEY" x="16.51" y="6.35" drill="1"/>
+<pad name="RXD" x="16.51" y="3.81" drill="1"/>
+<pad name="TXD" x="16.51" y="1.27" drill="1"/>
+<pad name="+5V" x="16.51" y="-1.27" drill="1"/>
+<pad name="+3.3V" x="16.51" y="-3.81" drill="1"/>
+<pad name="GND" x="16.51" y="-6.35" drill="1"/>
 <text x="-18.415" y="8.89" size="1.27" layer="21">&gt;NAME</text>
 <text x="12.065" y="-10.16" size="1.27" layer="27">&gt;VALUE</text>
 </package>
@@ -14539,10 +14539,10 @@ Low profile connectors, straight&lt;p&gt;
 <part name="C2" library="rcl" deviceset="C-EU" device="025-025X050" value="100nF"/>
 <part name="C3" library="rcl" deviceset="C-EU" device="025-025X050" value="22pF"/>
 <part name="C4" library="rcl" deviceset="C-EU" device="025-025X050" value="22pF"/>
-<part name="R1" library="rcl" deviceset="R-EU_" device="0204/5" value="10k"/>
-<part name="R2" library="rcl" deviceset="R-EU_" device="0204/5" value="100k"/>
-<part name="R3" library="rcl" deviceset="R-EU_" device="0204/5" value="100k"/>
-<part name="R4" library="rcl" deviceset="R-EU_" device="0204/5" value="100k"/>
+<part name="R1" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="0207/7" value="100k"/>
+<part name="R3" library="rcl" deviceset="R-EU_" device="0207/7" value="100k"/>
+<part name="R4" library="rcl" deviceset="R-EU_" device="0207/7" value="100k"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
@@ -14572,13 +14572,14 @@ Low profile connectors, straight&lt;p&gt;
 <part name="BT1" library="ZAP-Wireless" deviceset="BT-MODULE" device=""/>
 <part name="P+8" library="supply1" deviceset="+5V" device=""/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
-<part name="R7" library="rcl" deviceset="R-EU_" device="0204/5" value="10k"/>
-<part name="R8" library="rcl" deviceset="R-EU_" device="0204/5" value="20k"/>
-<part name="R9" library="rcl" deviceset="R-EU_" device="0204/5" value="10k"/>
-<part name="R10" library="rcl" deviceset="R-EU_" device="0204/5" value="20k"/>
+<part name="R7" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
+<part name="R8" library="rcl" deviceset="R-EU_" device="0207/7" value="20k"/>
+<part name="R9" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
+<part name="R10" library="rcl" deviceset="R-EU_" device="0207/7" value="20k"/>
 <part name="EXT" library="con-molex" deviceset="22-23-2081" device="" value="PSK-8"/>
 <part name="P+9" library="supply1" deviceset="+5V" device=""/>
 <part name="GND12" library="supply1" deviceset="GND" device=""/>
+<part name="C7" library="rcl" deviceset="CPOL-EU" device="E2.5-5" value="100µF"/>
 </parts>
 <sheets>
 <sheet>
@@ -15063,7 +15064,8 @@ Low profile connectors, straight&lt;p&gt;
 <instance part="EXT" gate="-7" x="149.86" y="121.92"/>
 <instance part="EXT" gate="-8" x="149.86" y="119.38"/>
 <instance part="P+9" gate="1" x="129.54" y="139.7"/>
-<instance part="GND12" gate="1" x="129.54" y="114.3"/>
+<instance part="GND12" gate="1" x="129.54" y="106.68"/>
+<instance part="C7" gate="G$1" x="116.84" y="121.92"/>
 </instances>
 <busses>
 </busses>
@@ -15077,9 +15079,14 @@ Low profile connectors, straight&lt;p&gt;
 </segment>
 <segment>
 <pinref part="P+9" gate="1" pin="+5V"/>
-<wire x1="129.54" y1="137.16" x2="129.54" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="137.16" x2="129.54" y2="127" width="0.1524" layer="91"/>
 <pinref part="EXT" gate="-7" pin="S"/>
+<wire x1="129.54" y1="127" x2="129.54" y2="121.92" width="0.1524" layer="91"/>
 <wire x1="129.54" y1="121.92" x2="147.32" y2="121.92" width="0.1524" layer="91"/>
+<pinref part="C7" gate="G$1" pin="+"/>
+<wire x1="116.84" y1="124.46" x2="116.84" y2="127" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="127" x2="129.54" y2="127" width="0.1524" layer="91"/>
+<junction x="129.54" y="127"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -15101,8 +15108,13 @@ Low profile connectors, straight&lt;p&gt;
 <segment>
 <pinref part="GND12" gate="1" pin="GND"/>
 <pinref part="EXT" gate="-8" pin="S"/>
-<wire x1="129.54" y1="116.84" x2="129.54" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="109.22" x2="129.54" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="114.3" x2="129.54" y2="119.38" width="0.1524" layer="91"/>
 <wire x1="129.54" y1="119.38" x2="147.32" y2="119.38" width="0.1524" layer="91"/>
+<pinref part="C7" gate="G$1" pin="-"/>
+<wire x1="116.84" y1="116.84" x2="116.84" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="114.3" x2="129.54" y2="114.3" width="0.1524" layer="91"/>
+<junction x="129.54" y="114.3"/>
 </segment>
 </net>
 <net name="N$3" class="0">
