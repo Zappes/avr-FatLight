@@ -14540,9 +14540,9 @@ Low profile connectors, straight&lt;p&gt;
 <part name="C3" library="rcl" deviceset="C-EU" device="025-025X050" value="22pF"/>
 <part name="C4" library="rcl" deviceset="C-EU" device="025-025X050" value="22pF"/>
 <part name="R1" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
-<part name="R2" library="rcl" deviceset="R-EU_" device="0207/7" value="100k"/>
-<part name="R3" library="rcl" deviceset="R-EU_" device="0207/7" value="100k"/>
-<part name="R4" library="rcl" deviceset="R-EU_" device="0207/7" value="100k"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
+<part name="R3" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
+<part name="R4" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
