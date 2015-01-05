@@ -11,6 +11,7 @@
 #include "lib/stripcontrol.h"
 #include "lib/uart.h"
 #include "lib/control.h"
+#include "lib/animation.h"
 
 /*
  * This one doesn't do much. It just calls the two other functions.
@@ -20,10 +21,10 @@ int main(void)
 	strip_init();
 	uart_init();
 	control_init();
+	anim_init();
+	bt_init();
 
-	strip_set_color_hex("FF00FF");
-	_delay_ms(50);
-	strip_set_color_hex("000000");
+	persistence_restore();
 
 	// required for serial input and the animation loop to work!
 	sei();

@@ -7,10 +7,10 @@
 
 #include <avr/io.h>
 #include <string.h>
-#include <stdlib.h>
 #include "stripcontrol.h"
 
 #include "uart.h"
+#include "util.h"
 
 void strip_init() {
 	// set PWM pins to output
@@ -29,27 +29,21 @@ void strip_init() {
 	TCCR2B |= _BV(CS21);
 
 	// turn off the strip
-	strip_set_color(0,0,0);
+	strip_set_rgb_components(0,0,0);
 }
 
-void strip_set_color(uint8_t red, uint8_t green, uint8_t blue) {
+void strip_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
 	STRIP_REG_RED = 255 - red;
 	STRIP_REG_GRN = 255 - green;
 	STRIP_REG_BLU = 255 - blue;
 }
 
-void strip_set_color_hex(char* color) {
+void strip_set_rgb_numeric(uint32_t colVal) {
 	uint8_t r,g,b;
-	uint32_t colVal;
+	get_components_from_numeric(colVal, &r, &g, &b);
+	strip_set_rgb_components(r, g, b);
+}
 
-	if(strlen(color) != 6) {
-		return;
-	}
-
-	colVal = strtoul(color, NULL, 16);
-	b = (uint8_t)(colVal & 0x000000FF);
-	g = (uint8_t)((colVal & 0x0000FF00) >> 8);
-	r = (uint8_t)((colVal & 0x00FF0000) >> 16);
-
-	strip_set_color(r, g, b);
+void strip_set_rgb_hex(char* color) {
+	strip_set_rgb_numeric(get_long_from_hex(color));
 }
