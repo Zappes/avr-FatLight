@@ -9,9 +9,12 @@
 #ifndef USART_H_
 #define USART_H_
 
-#include <stdbool.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdarg.h>
+
 #include "uart.h"
 
 char commandBuffer[64];
@@ -64,12 +67,40 @@ void uart_write_string(char *str) {
 		uart_write_char(*str++);
 }
 
-void uart_write_prompted_line(char* prompt, char* value) {
-	uart_write_string(prompt);
-	uart_write_string(": ");
-	uart_write_string(value);
+void uart_write_formatted(const char* format, ...) {
+	char outbuffer[UART_FORMAT_BUFFER_SIZE];
+
+  va_list argptr;
+  va_start(argptr, format);
+  vsnprintf(outbuffer, UART_FORMAT_BUFFER_SIZE, format, argptr);
+  va_end(argptr);
+
+	uart_write_string(outbuffer);
+}
+
+void uart_writeln_char(unsigned char c) {
+	uart_write_char(c);
 	uart_write_string("\r\n");
 }
+
+void uart_writeln_string(char *str) {
+	uart_write_string(str);
+	uart_write_string("\r\n");
+}
+
+void uart_writeln_formatted(const char* format, ...) {
+	char outbuffer[UART_FORMAT_BUFFER_SIZE];
+
+  va_list argptr;
+  va_start(argptr, format);
+  vsnprintf(outbuffer, UART_FORMAT_BUFFER_SIZE, format, argptr);
+  va_end(argptr);
+
+	uart_write_string(outbuffer);
+	uart_write_string("\r\n");
+}
+
+
 /*
  * Handles bytes received from the serial port. Fills up the command buffer and calls
  * the bufferReadyCallback when the buffer overflows or a linefeed/newline has been

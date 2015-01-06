@@ -12,10 +12,9 @@
 #include "lib/uart.h"
 #include "lib/control.h"
 #include "lib/animation.h"
+#include "lib/bluetooth.h"
+#include "lib/persistence.h"
 
-/*
- * This one doesn't do much. It just calls the two other functions.
- */
 int main(void)
 {
 	strip_init();

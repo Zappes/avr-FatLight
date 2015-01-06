@@ -4,92 +4,71 @@
  *  Created on: 05.01.2015
  *      Author: zaphod
  */
-#include <avr/interrupt.h>
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <string.h>
-#include <ctype.h>
-#include <stdio.h>
 
 #include "control.h"
 #include "uart.h"
 #include "animation.h"
 #include "util.h"
 #include "persistence.h"
+#include "parser.h"
+#include "bluetooth.h"
 
-char outbuffer[32];
 
-void prepare_command_string(char* commandBuffer) {
-	// process the command string so that all parameters are separated with a 0 byte
-	// and all letters are uppercased.
-	char* p = commandBuffer;
-	while (*p != 0) {
-		if (*p == ' ' || *p == 10 || *p == 13) {
-			*p = 0;
-		} else {
-			*p = toupper(*p);
-		}
-		p++;
-	}
-}
-
-void uart_handle_command(char* commandBuffer) {
+void handle_command(char* commandBuffer) {
 	cli();
 
-	prepare_command_string(commandBuffer);
+	parser_prepare_buffer(commandBuffer);
 
 	if (strcmp(commandBuffer, "SET") == 0) {
-		commandBuffer = commandBuffer + strlen(commandBuffer) + 1;
+		uint32_t color_numeric = parser_get_long_hex(&commandBuffer);
 
-		uint32_t color_numeric = get_long_from_hex(commandBuffer);
-		sprintf(outbuffer, "%06lX", color_numeric);
-		uart_write_prompted_line("Setting color", outbuffer);
+		uart_writeln_formatted("Setting color: %06lX", color_numeric);
+
 		anim_set_direct_rgb_numeric(color_numeric);
 	}
 	else if (strcmp(commandBuffer, "FADE") == 0) {
-		commandBuffer = commandBuffer + strlen(commandBuffer) + 1;
+		uint32_t color_numeric = parser_get_long_hex(&commandBuffer);
 
-		uint32_t color_numeric = get_long_from_hex(commandBuffer);
-		sprintf(outbuffer, "%06lX", color_numeric);
-		uart_write_prompted_line("Fading to color", outbuffer);
+		uart_writeln_formatted("Fading to color: %06lX", color_numeric);
+
 		anim_set_target_rgb_numeric(color_numeric);
 	}
 	else if (strcmp(commandBuffer, "DELAY") == 0) {
-		commandBuffer = commandBuffer + strlen(commandBuffer) + 1;
+		uint8_t delay = parser_get_byte_hex(&commandBuffer);
 
-		uint8_t delay = get_byte_from_hex(commandBuffer);
-		sprintf(outbuffer, "%02X", delay);
-		uart_write_prompted_line("Setting delay", outbuffer);
+		uart_writeln_formatted("Setting delay: %02X", delay);
+
 		anim_set_delay(delay);
 	}
 	else if (strcmp(commandBuffer, "STORE") == 0) {
 		persistence_persist();
-		uart_write_string("Settings stored.\r\n");
+		uart_writeln_string("Settings stored");
 	}
 	else if (strcmp(commandBuffer, "LOAD") == 0) {
 		persistence_restore();
-		uart_write_string("Settings loaded.\r\n");
+		uart_writeln_string("Settings loaded");
 	}
 	else if (strcmp(commandBuffer, "STATUS") == 0) {
-		sprintf(outbuffer, "%06lX", anim_get_current_rgb_numeric());
-		uart_write_prompted_line("Current RGB", outbuffer);
-		sprintf(outbuffer, "%06lX", anim_get_target_rgb_numeric());
-		uart_write_prompted_line("Target RGB ", outbuffer);
-		sprintf(outbuffer, "%02X", anim_get_delay());
-		uart_write_prompted_line("Anim delay ", outbuffer);
+		uart_writeln_formatted("Current RGB: %06lX", anim_get_current_rgb_numeric());
+		uart_writeln_formatted("Target RGB : %06lX", anim_get_current_rgb_numeric());
+		uart_writeln_formatted("Anim delay : %02X", anim_get_delay());
 	}
 	else if (strcmp(commandBuffer, "RENAME") == 0) {
-		commandBuffer = commandBuffer + strlen(commandBuffer) + 1;
+		char* name = parser_get_string(&commandBuffer);
 
-		uart_write_prompted_line("Renaming device", commandBuffer);
-		bt_rename_device(commandBuffer);
+		uart_writeln_formatted("Renaming device: %s", name);
+		bt_rename_device(name);
 	}
 	else {
-		uart_write_prompted_line("Unknown command", commandBuffer);
+		uart_writeln_formatted("Unknown command: %s", commandBuffer);
 	}
 
 	sei();
 }
 
 void control_init(void) {
-	uart_set_callback(uart_handle_command);
+	uart_set_callback(handle_command);
 }
