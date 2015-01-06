@@ -10,10 +10,12 @@
 #include "util.h"
 
 #include "stripcontrol.h"
+#include "animation.h"
 
 uint8_t target_r, target_g, target_b = 0;
 volatile uint8_t current_r, current_g, current_b = 0;
-uint8_t anim_delay = 0;
+uint8_t anim_mode		= ANIM_MODE_SET;
+uint8_t anim_delay 	= 0;
 
 void anim_init(void) {
 	// Timer 1 is used for the animation loop
@@ -41,41 +43,40 @@ uint8_t anim_get_delay(void) {
 	return anim_delay;
 }
 
-void anim_set_target_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
+void anim_set_mode(uint8_t mode) {
+	anim_mode = mode;
+}
+
+uint8_t anim_get_mode(void) {
+	return anim_mode;
+}
+
+void anim_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
 	target_r = red;
 	target_g = green;
 	target_b = blue;
+
+	if(anim_mode == ANIM_MODE_SET) {
+		current_r = red;
+		current_g = green;
+		current_b = blue;
+
+		strip_set_rgb_components(red, green, blue);
+	}
 }
 
-void anim_set_target_rgb_numeric(uint32_t colVal) {
+void anim_set_rgb_numeric(uint32_t colVal) {
 	uint8_t r,g,b;
 	get_components_from_numeric(colVal, &r, &g, &b);
-	anim_set_target_rgb_components(r, g, b);
-}
-
-uint32_t anim_get_target_rgb_numeric(void) {
-	return (uint32_t)target_b | ((uint32_t)target_g << 8) | ((uint32_t)target_r << 16);
-}
-
-void anim_set_direct_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
-	target_r = red;
-	target_g = green;
-	target_b = blue;
-	current_r = red;
-	current_g = green;
-	current_b = blue;
-
-	strip_set_rgb_components(red, green, blue);
-}
-
-void anim_set_direct_rgb_numeric(uint32_t colVal) {
-	uint8_t r,g,b;
-	get_components_from_numeric(colVal, &r, &g, &b);
-	anim_set_direct_rgb_components(r, g, b);
+	anim_set_rgb_components(r, g, b);
 }
 
 uint32_t anim_get_current_rgb_numeric(void) {
 	return (uint32_t)current_b | ((uint32_t)current_g << 8) | ((uint32_t)current_r << 16);
+}
+
+uint32_t anim_get_target_rgb_numeric(void) {
+	return (uint32_t)target_b | ((uint32_t)target_g << 8) | ((uint32_t)target_r << 16);
 }
 
 void fade_to_target(volatile uint8_t* variable, const uint8_t target) {

@@ -23,7 +23,7 @@ int main(void)
 	anim_init();
 	bt_init();
 
-	persistence_restore();
+	persistence_restore(persistence_get_current_slot());
 
 	// required for serial input and the animation loop to work!
 	sei();

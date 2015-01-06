@@ -22,19 +22,23 @@ void handle_command(char* commandBuffer) {
 
 	parser_prepare_buffer(commandBuffer);
 
-	if (strcmp(commandBuffer, "SET") == 0) {
+	if (strcmp(commandBuffer, "MODE") == 0) {
+		uint8_t mode = parser_get_byte_hex(&commandBuffer);
+
+		if(mode == ANIM_MODE_FADE || mode == ANIM_MODE_SET) {
+			uart_writeln_formatted("Setting mode: %02X", mode);
+			anim_set_mode(mode);
+		}
+		else {
+			uart_writeln_formatted("ERROR - Unknown mode: %02X", mode);
+		}
+	}
+	else if (strcmp(commandBuffer, "SET") == 0) {
 		uint32_t color_numeric = parser_get_long_hex(&commandBuffer);
 
 		uart_writeln_formatted("Setting color: %06lX", color_numeric);
 
-		anim_set_direct_rgb_numeric(color_numeric);
-	}
-	else if (strcmp(commandBuffer, "FADE") == 0) {
-		uint32_t color_numeric = parser_get_long_hex(&commandBuffer);
-
-		uart_writeln_formatted("Fading to color: %06lX", color_numeric);
-
-		anim_set_target_rgb_numeric(color_numeric);
+		anim_set_rgb_numeric(color_numeric);
 	}
 	else if (strcmp(commandBuffer, "DELAY") == 0) {
 		uint8_t delay = parser_get_byte_hex(&commandBuffer);
@@ -44,17 +48,33 @@ void handle_command(char* commandBuffer) {
 		anim_set_delay(delay);
 	}
 	else if (strcmp(commandBuffer, "STORE") == 0) {
-		persistence_persist();
-		uart_writeln_string("Settings stored");
+		uint8_t slot = parser_get_byte_hex(&commandBuffer);
+
+		if(slot < PERSISTENCE_NUM_SLOTS) {
+			persistence_persist(slot);
+			uart_writeln_formatted("Saving settings in slot: %02X", slot);
+		}
+		else {
+			uart_writeln_formatted("ERROR - Slot out of range: %02X", slot);
+		}
 	}
 	else if (strcmp(commandBuffer, "LOAD") == 0) {
-		persistence_restore();
-		uart_writeln_string("Settings loaded");
+		uint8_t slot = parser_get_byte_hex(&commandBuffer);
+
+		if(slot < PERSISTENCE_NUM_SLOTS) {
+			persistence_restore(slot);
+			uart_writeln_formatted("Loaded settings from slot: %02X", slot);
+		}
+		else {
+			uart_writeln_formatted("ERROR - Slot out of range: %02X", slot);
+		}
 	}
 	else if (strcmp(commandBuffer, "STATUS") == 0) {
-		uart_writeln_formatted("Current RGB: %06lX", anim_get_current_rgb_numeric());
-		uart_writeln_formatted("Target RGB : %06lX", anim_get_current_rgb_numeric());
-		uart_writeln_formatted("Anim delay : %02X", anim_get_delay());
+		uart_writeln_formatted("Current RGB : %06lX", anim_get_current_rgb_numeric());
+		uart_writeln_formatted("Target RGB  : %06lX", anim_get_current_rgb_numeric());
+		uart_writeln_formatted("Anim mode   : %02X", anim_get_mode());
+		uart_writeln_formatted("Anim delay  : %02X", anim_get_delay());
+		uart_writeln_formatted("Current slot: %02X", persistence_get_current_slot());
 	}
 	else if (strcmp(commandBuffer, "RENAME") == 0) {
 		char* name = parser_get_string(&commandBuffer);

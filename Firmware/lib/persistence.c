@@ -11,36 +11,70 @@
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
 
-FatLightPersistenceData pers_data = {0,0};
+FatLightPersistenceHeader persHeader = {0,0};
+FatLightPersistenceData persData = {0,0,0,0};
 
-void persistence_restore() {
+void persistence_restore(uint8_t slot) {
+	if(slot >= PERSISTENCE_NUM_SLOTS)
+		return;
+
 	cli();
-	eeprom_read_block((void*)&pers_data, (void*)0, sizeof(pers_data));
+	eeprom_read_block((void*)&persData, (void*)(sizeof(persHeader) + (slot * sizeof(persData))), sizeof(persData));
 	sei();
 
-	if(pers_data.magic == EEPROM_MAGIC) {
-		anim_set_direct_rgb_numeric(pers_data.rgb);
-		anim_set_delay(pers_data.delay);
+	if(persData.magic == PERSISTENCE_EEPROM_MAGIC) {
+		anim_set_mode(persData.mode);
+		anim_set_delay(persData.delay);
+		anim_set_rgb_numeric(persData.rgb);
 	}
 	else {
-		anim_set_direct_rgb_numeric(0);
+		anim_set_mode(ANIM_MODE_SET);
 		anim_set_delay(0);
+		anim_set_rgb_numeric(0);
 	}
 }
 
-void persistence_persist() {
+void persistence_persist(uint8_t slot) {
+	if(slot >= PERSISTENCE_NUM_SLOTS)
+		return;
+
 	uint32_t rgb = anim_get_current_rgb_numeric();
 	uint8_t delay = anim_get_delay();
+	uint8_t mode = anim_get_mode();
 
 	// only persist if it differs from the last read state
-	if(rgb != pers_data.rgb || delay != pers_data.delay) {
-		pers_data.magic = EEPROM_MAGIC;
-		pers_data.rgb = rgb;
-		pers_data.delay = delay;
+	if(rgb != persData.rgb || delay != persData.delay || mode != persData.mode) {
+		persData.magic = PERSISTENCE_EEPROM_MAGIC;
+		persData.rgb = rgb;
+		persData.mode = mode;
+		persData.delay = delay;
 
 		cli();
-		eeprom_write_block((void*)&pers_data, (void*)0, sizeof(pers_data));
+		eeprom_write_block((void*)&persData, (void*)(sizeof(persHeader) + (slot * sizeof(persData))), sizeof(persData));
+		sei();
+	}
+
+	if(slot != persHeader.slot) {
+		persHeader.magic = PERSISTENCE_EEPROM_MAGIC;
+		persHeader.slot = slot;
+
+		cli();
+		eeprom_write_block((void*)&persHeader, (void*)0, sizeof(persHeader));
 		sei();
 	}
 }
 
+uint8_t persistence_get_current_slot(void) {
+	if(persHeader.magic == 0) {
+		cli();
+		eeprom_read_block((void*)&persHeader, (void*)0, sizeof(persHeader));
+		sei();
+	}
+
+	if(persHeader.magic == PERSISTENCE_EEPROM_MAGIC) {
+		return persHeader.slot;
+	}
+	else {
+		return 0;
+	}
+}
