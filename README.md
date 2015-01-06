@@ -9,3 +9,5 @@ Long: I recently ordered everything needed for the creation of PCBs, i.e. a UV e
 an etching apparatus, chemicals, boards, the works. As a first project, I wanted to do something
 that I could use, that I understood from the electronics perspective and that could easily be
 done on a one-sided PCB without solder mask. A controller for RGB strips seemed to be a good idea, so here we go. :)
+
+![Image of the FatLight prototype](https://github.com/Zappes/avr-FatLight/blob/master/Doc/FatLight-Breadboard.jpg?raw=true)
