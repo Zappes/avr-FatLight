@@ -15,8 +15,9 @@
 
 uint8_t target_r, target_g, target_b = 0;
 volatile uint8_t current_r, current_g, current_b = 0;
-uint8_t anim_mode		= ANIM_MODE_SET;
-uint8_t anim_delay 	= 0;
+uint8_t anim_mode = ANIM_MODE_SET;
+uint8_t anim_delay = 0;
+uint8_t anim_step = 0;
 
 void anim_init(void) {
 	// Timer 1 is used for the animation loop
@@ -44,10 +45,20 @@ uint8_t anim_get_delay(void) {
 	return anim_delay;
 }
 
+void anim_set_step(uint8_t step) {
+	if (step != 0) {
+		anim_step = step;
+	}
+}
+
+uint8_t anim_get_step(void) {
+	return anim_step;
+}
+
 void anim_set_mode(uint8_t mode) {
 	anim_mode = mode;
 
-	if(mode == ANIM_MODE_DISCO) {
+	if (mode == ANIM_MODE_DISCO) {
 		// initialize the random number generator with the current value of the animation timer
 		srand(TCNT1);
 	}
@@ -62,7 +73,7 @@ void anim_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
 	target_g = green;
 	target_b = blue;
 
-	if(anim_mode == ANIM_MODE_SET) {
+	if (anim_mode == ANIM_MODE_SET) {
 		current_r = red;
 		current_g = green;
 		current_b = blue;
@@ -72,28 +83,37 @@ void anim_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
 }
 
 void anim_set_rgb_numeric(uint32_t colVal) {
-	uint8_t r,g,b;
+	uint8_t r, g, b;
 	get_components_from_numeric(colVal, &r, &g, &b);
 	anim_set_rgb_components(r, g, b);
 }
 
 uint32_t anim_get_current_rgb_numeric(void) {
-	return (uint32_t)current_b | ((uint32_t)current_g << 8) | ((uint32_t)current_r << 16);
+	return (uint32_t) current_b | ((uint32_t) current_g << 8)
+			| ((uint32_t) current_r << 16);
 }
 
 uint32_t anim_get_target_rgb_numeric(void) {
-	return (uint32_t)target_b | ((uint32_t)target_g << 8) | ((uint32_t)target_r << 16);
+	return (uint32_t) target_b | ((uint32_t) target_g << 8)
+			| ((uint32_t) target_r << 16);
 }
 
 uint8_t fade_to_target(volatile uint8_t* variable, const uint8_t target) {
-	if(*variable == target)
+	if (*variable == target)
 		return 0;
 
-	if(*variable < target) {
-		(*variable)++;
-	}
-	else {
-		(*variable)--;
+	if (*variable < target) {
+		if (anim_step <= (target - *variable)) {
+			(*variable) += anim_step;
+		} else {
+			*variable = target;
+		}
+	} else {
+		if (anim_step <= (*variable - target)) {
+			(*variable) -= anim_step;
+		} else {
+			*variable = target;
+		}
 	}
 
 	return 1;
@@ -106,7 +126,7 @@ uint8_t fade_to_target(volatile uint8_t* variable, const uint8_t target) {
 ISR(TIMER1_OVF_vect) {
 	static uint8_t anim_counter = 0;
 
-	if(anim_counter == 0) {
+	if (anim_counter == 0) {
 		anim_counter = anim_delay;
 
 		uint8_t faded = 0;
@@ -115,15 +135,13 @@ ISR(TIMER1_OVF_vect) {
 		faded += fade_to_target(&current_g, target_g);
 		faded += fade_to_target(&current_b, target_b);
 
-		if(faded) {
+		if (faded) {
 			strip_set_rgb_components(current_r, current_g, current_b);
-		}
-		else if(anim_mode == ANIM_MODE_DISCO){
+		} else if (anim_mode == ANIM_MODE_DISCO) {
 			// no fading occurred, so we have reached the target color and need a new one
 			anim_set_rgb_components(rand() & 0xFF, rand() & 0xFF, rand() & 0xFF);
 		}
-	}
-	else {
+	} else {
 		anim_counter--;
 	}
 }

@@ -23,6 +23,7 @@ typedef struct {
   uint32_t rgb;
   uint8_t mode;
   uint8_t delay;
+  uint8_t step;
 } FatLightPersistenceData;
 
 void persistence_restore(uint8_t slot);

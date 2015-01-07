@@ -33,6 +33,17 @@ void handle_command(char* commandBuffer) {
 			uart_writeln_formatted("ERROR - Unknown mode: %02X", mode);
 		}
 	}
+	else if (strcmp(commandBuffer, "STEP") == 0) {
+		uint8_t step = parser_get_byte_hex(&commandBuffer);
+
+		if(step != 0) {
+			uart_writeln_formatted("Setting step: %02X", step);
+			anim_set_step(step);
+		}
+		else {
+			uart_writeln_string("ERROR - Step may not be 0");
+		}
+	}
 	else if (strcmp(commandBuffer, "SET") == 0) {
 		uint32_t color_numeric = parser_get_long_hex(&commandBuffer);
 
@@ -71,9 +82,10 @@ void handle_command(char* commandBuffer) {
 	}
 	else if (strcmp(commandBuffer, "STATUS") == 0) {
 		uart_writeln_formatted("Current RGB : %06lX", anim_get_current_rgb_numeric());
-		uart_writeln_formatted("Target RGB  : %06lX", anim_get_current_rgb_numeric());
+		uart_writeln_formatted("Target RGB  : %06lX", anim_get_target_rgb_numeric());
 		uart_writeln_formatted("Anim mode   : %02X", anim_get_mode());
 		uart_writeln_formatted("Anim delay  : %02X", anim_get_delay());
+		uart_writeln_formatted("Anim step   : %02X", anim_get_step());
 		uart_writeln_formatted("Current slot: %02X", persistence_get_current_slot());
 	}
 	else if (strcmp(commandBuffer, "RENAME") == 0) {

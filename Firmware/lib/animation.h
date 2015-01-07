@@ -20,6 +20,9 @@ uint8_t anim_get_delay(void);
 void anim_set_mode(uint8_t delay);
 uint8_t anim_get_mode(void);
 
+void anim_set_step(uint8_t step);
+uint8_t anim_get_step(void);
+
 void anim_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue);
 void anim_set_rgb_numeric(uint32_t colVal);
 
