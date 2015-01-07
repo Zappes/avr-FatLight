@@ -10,6 +10,7 @@
 
 #define ANIM_MODE_SET		0
 #define ANIM_MODE_FADE	1
+#define ANIM_MODE_DISCO	2
 
 void anim_init(void);
 

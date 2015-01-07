@@ -7,8 +7,9 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include "util.h"
+#include <stdlib.h>
 
+#include "util.h"
 #include "stripcontrol.h"
 #include "animation.h"
 
@@ -45,6 +46,11 @@ uint8_t anim_get_delay(void) {
 
 void anim_set_mode(uint8_t mode) {
 	anim_mode = mode;
+
+	if(mode == ANIM_MODE_DISCO) {
+		// initialize the random number generator with the current value of the animation timer
+		srand(TCNT1);
+	}
 }
 
 uint8_t anim_get_mode(void) {
@@ -79,9 +85,9 @@ uint32_t anim_get_target_rgb_numeric(void) {
 	return (uint32_t)target_b | ((uint32_t)target_g << 8) | ((uint32_t)target_r << 16);
 }
 
-void fade_to_target(volatile uint8_t* variable, const uint8_t target) {
+uint8_t fade_to_target(volatile uint8_t* variable, const uint8_t target) {
 	if(*variable == target)
-		return;
+		return 0;
 
 	if(*variable < target) {
 		(*variable)++;
@@ -89,6 +95,8 @@ void fade_to_target(volatile uint8_t* variable, const uint8_t target) {
 	else {
 		(*variable)--;
 	}
+
+	return 1;
 }
 
 /*
@@ -101,11 +109,19 @@ ISR(TIMER1_OVF_vect) {
 	if(anim_counter == 0) {
 		anim_counter = anim_delay;
 
-		fade_to_target(&current_r, target_r);
-		fade_to_target(&current_g, target_g);
-		fade_to_target(&current_b, target_b);
+		uint8_t faded = 0;
 
-		strip_set_rgb_components(current_r, current_g, current_b);
+		faded += fade_to_target(&current_r, target_r);
+		faded += fade_to_target(&current_g, target_g);
+		faded += fade_to_target(&current_b, target_b);
+
+		if(faded) {
+			strip_set_rgb_components(current_r, current_g, current_b);
+		}
+		else if(anim_mode == ANIM_MODE_DISCO){
+			// no fading occurred, so we have reached the target color and need a new one
+			anim_set_rgb_components(rand() & 0xFF, rand() & 0xFF, rand() & 0xFF);
+		}
 	}
 	else {
 		anim_counter--;

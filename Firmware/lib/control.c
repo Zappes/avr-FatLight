@@ -25,7 +25,7 @@ void handle_command(char* commandBuffer) {
 	if (strcmp(commandBuffer, "MODE") == 0) {
 		uint8_t mode = parser_get_byte_hex(&commandBuffer);
 
-		if(mode == ANIM_MODE_FADE || mode == ANIM_MODE_SET) {
+		if(mode == ANIM_MODE_FADE || mode == ANIM_MODE_SET || ANIM_MODE_DISCO) {
 			uart_writeln_formatted("Setting mode: %02X", mode);
 			anim_set_mode(mode);
 		}
