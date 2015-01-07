@@ -32,6 +32,15 @@ void persistence_restore(uint8_t slot) {
 		anim_set_delay(0);
 		anim_set_rgb_numeric(0);
 	}
+
+	if(slot != persHeader.slot) {
+		persHeader.magic = PERSISTENCE_EEPROM_MAGIC;
+		persHeader.slot = slot;
+
+		cli();
+		eeprom_write_block((void*)&persHeader, (void*)0, sizeof(persHeader));
+		sei();
+	}
 }
 
 void persistence_persist(uint8_t slot) {

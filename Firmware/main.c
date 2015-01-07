@@ -14,6 +14,7 @@
 #include "lib/animation.h"
 #include "lib/bluetooth.h"
 #include "lib/persistence.h"
+#include "lib/buttons.h"
 
 int main(void)
 {
@@ -22,6 +23,7 @@ int main(void)
 	control_init();
 	anim_init();
 	bt_init();
+	buttons_init();
 
 	persistence_restore(persistence_get_current_slot());
 
@@ -30,7 +32,7 @@ int main(void)
 
 	while(1)
 	{
-		// everything is done in the interrupt routines ...
+		buttons_process();
 	}
 
 	return 0;
