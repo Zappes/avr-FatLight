@@ -14403,14 +14403,32 @@ Low profile connectors, straight&lt;p&gt;
 <pad name="GND" x="16.51" y="-6.35" drill="1"/>
 <text x="-18.415" y="8.89" size="1.27" layer="21">&gt;NAME</text>
 <text x="12.065" y="-10.16" size="1.27" layer="27">&gt;VALUE</text>
+<text x="15.24" y="5.715" size="1.27" layer="21" align="bottom-right">Key</text>
+<text x="15.24" y="3.175" size="1.27" layer="21" align="bottom-right">RXD</text>
+<text x="15.24" y="0.635" size="1.27" layer="21" align="bottom-right">TXD</text>
+<text x="15.24" y="-1.905" size="1.27" layer="21" align="bottom-right">+5V</text>
+<text x="15.24" y="-4.445" size="1.27" layer="21" align="bottom-right">+3.3V</text>
+<text x="15.24" y="-6.985" size="1.27" layer="21" align="bottom-right">GND</text>
+<pad name="KEY1" x="-16.51" y="6.35" drill="1"/>
+<pad name="+5V1" x="-16.51" y="3.81" drill="1"/>
+<pad name="GND1" x="-16.51" y="1.27" drill="1"/>
+<pad name="TXD1" x="-16.51" y="-1.27" drill="1"/>
+<pad name="RXD1" x="-16.51" y="-3.81" drill="1"/>
+<pad name="STATE" x="-16.51" y="-6.35" drill="1"/>
+<text x="-15.24" y="5.715" size="1.27" layer="21">Key</text>
+<text x="-15.24" y="3.175" size="1.27" layer="21">+5V</text>
+<text x="-15.24" y="0.635" size="1.27" layer="21">GND</text>
+<text x="-15.24" y="-1.905" size="1.27" layer="21">TXD</text>
+<text x="-15.24" y="-4.445" size="1.27" layer="21">RXD</text>
+<text x="-15.24" y="-6.985" size="1.27" layer="21">State</text>
 </package>
 </packages>
 <symbols>
 <symbol name="BT-MODULE">
 <wire x1="-10.16" y1="5.08" x2="10.16" y2="5.08" width="0.254" layer="94"/>
-<wire x1="10.16" y1="5.08" x2="10.16" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="10.16" y1="-5.08" x2="-10.16" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="-5.08" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
+<wire x1="10.16" y1="5.08" x2="10.16" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-7.62" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-7.62" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
 <pin name="+5V" x="-15.24" y="2.54" visible="pin" length="middle" direction="pwr"/>
 <pin name="+3.3V" x="-15.24" y="0" visible="pin" length="middle" direction="pwr"/>
 <pin name="GND" x="-15.24" y="-2.54" visible="pin" length="middle" direction="pwr"/>
@@ -14418,7 +14436,8 @@ Low profile connectors, straight&lt;p&gt;
 <pin name="RXD" x="15.24" y="0" visible="pin" length="middle" direction="in" rot="R180"/>
 <pin name="TXD" x="15.24" y="-2.54" visible="pin" length="middle" direction="out" rot="R180"/>
 <text x="-10.16" y="5.588" size="1.27" layer="95">&gt;NAME</text>
-<text x="3.556" y="-7.112" size="1.27" layer="96">&gt;VALUE</text>
+<text x="3.556" y="-9.652" size="1.27" layer="96">&gt;VALUE</text>
+<pin name="STATE" x="15.24" y="-5.08" visible="pin" length="middle" direction="out" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -14430,11 +14449,12 @@ Low profile connectors, straight&lt;p&gt;
 <device name="" package="HC-05-6PIN">
 <connects>
 <connect gate="G$1" pin="+3.3V" pad="+3.3V"/>
-<connect gate="G$1" pin="+5V" pad="+5V"/>
-<connect gate="G$1" pin="GND" pad="GND"/>
-<connect gate="G$1" pin="KEY" pad="KEY"/>
-<connect gate="G$1" pin="RXD" pad="RXD"/>
-<connect gate="G$1" pin="TXD" pad="TXD"/>
+<connect gate="G$1" pin="+5V" pad="+5V +5V1"/>
+<connect gate="G$1" pin="GND" pad="GND GND1"/>
+<connect gate="G$1" pin="KEY" pad="KEY KEY1"/>
+<connect gate="G$1" pin="RXD" pad="RXD RXD1"/>
+<connect gate="G$1" pin="STATE" pad="STATE"/>
+<connect gate="G$1" pin="TXD" pad="TXD TXD1"/>
 </connects>
 <technologies>
 <technology name=""/>
