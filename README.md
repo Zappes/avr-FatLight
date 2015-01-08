@@ -10,4 +10,8 @@ an etching apparatus, chemicals, boards, the works. As a first project, I wanted
 that I could use, that I understood from the electronics perspective and that could easily be
 done on a one-sided PCB without solder mask. A controller for RGB strips seemed to be a good idea, so here we go. :)
 
+**WARNING IF YOU WANT TO BUILD THIS**
+Make sure that the pinout of your Bluetooth module matches the pinout on the board. I have three different HC-05 modules in my parts bin, and every type has a different pinout ... This sucks enormously, and if I didn't have those modules lying around, I'd use a pure HC-05 module instead of the breakouts i have now.
+
 ![Image of the FatLight prototype](https://github.com/Zappes/avr-FatLight/blob/master/Doc/FatLight-Breadboard.jpg?raw=true)
+
