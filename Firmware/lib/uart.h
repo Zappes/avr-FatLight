@@ -16,14 +16,17 @@
 #define UART_BAUD_CALC(UART_BAUD_RATE,F_CPU) ((F_CPU)/((UART_BAUD_RATE)*16l)-1)
 
 // the size of the buffer used for formatted output
-#define UART_FORMAT_BUFFER_SIZE 64
+#define UART_FORMAT_BUFFER_SIZE 80
+
+// the size of the buffer used for formatted output
+#define UART_COMMAND_BUFFER_SIZE 64
 
 typedef void (*uart_callback_t)(char* commandBuffer);
 
 /*
  * Sets the callback reference for buffer ready events 
  */
-void uart_set_callback(uart_callback_t cb);
+uart_callback_t uart_set_callback(uart_callback_t cb);
 
 /*
  * Initializes the USART registers, enables the ISR

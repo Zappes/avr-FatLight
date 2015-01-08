@@ -14,10 +14,11 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "uart.h"
 
-char commandBuffer[64];
+char commandBuffer[UART_COMMAND_BUFFER_SIZE];
 volatile uint8_t bufferPos = 0;
 volatile bool bufferReady = false;
 
@@ -26,8 +27,12 @@ uart_callback_t serialBufferReadyCallback = 0x00;
 /*
  * Sets the callback reference for buffer ready events 
  */
-void uart_set_callback(uart_callback_t cb) {
+uart_callback_t uart_set_callback(uart_callback_t cb) {
+	uart_callback_t old = serialBufferReadyCallback;
+
 	serialBufferReadyCallback = cb;
+
+	return old;
 }
 
 /*
@@ -45,6 +50,9 @@ void uart_init(void) {
 	// enable interrupts with sei() in your main program.
 	// this is required for this code to work, but it's not
 	// done right here in order to not interfere with your code.
+
+	// clear command buffer.
+	memset(commandBuffer, 0, UART_COMMAND_BUFFER_SIZE);
 }
 
 /*
@@ -109,14 +117,20 @@ void uart_writeln_formatted(const char* format, ...) {
 ISR( USART_RX_vect) {
 	char chrRead;
 	chrRead = UDR0;
-	commandBuffer[bufferPos++] = chrRead;
-	commandBuffer[bufferPos] = 0x00;
+
+	if(chrRead != 10 && chrRead != 13) {
+		commandBuffer[bufferPos++] = chrRead;
+		commandBuffer[bufferPos] = 0x00;
+	}
+
 	if ((bufferPos >= (sizeof(commandBuffer) - 1))
 			|| ((chrRead == '\n' || chrRead == '\r'))) {
-		bufferPos = 0;
-		bufferReady = true;
-		if (serialBufferReadyCallback != 0x00)
+		if (serialBufferReadyCallback != 0x00 && bufferPos > 0)
 			serialBufferReadyCallback(commandBuffer);
+
+		// clear command buffer.
+		memset(commandBuffer, 0, UART_COMMAND_BUFFER_SIZE);
+		bufferPos = 0;
 	}
 }
 

@@ -26,18 +26,32 @@ void parser_prepare_buffer(char* commandBuffer) {
 	}
 }
 
+void advance_buffer_pointer(char** bufferPointer) {
+	// first seek to the first 0 character
+	while(**bufferPointer != 0) {
+		*bufferPointer+=1;
+	}
+
+	// now skip all 0s
+	while(**bufferPointer == 0) {
+		*bufferPointer+=1;
+	}
+
+	// at this point, the pointer points to the next string.
+}
+
 uint32_t parser_get_long_hex(char** bufferPointer) {
-	*bufferPointer = *bufferPointer + strlen(*bufferPointer) + 1;
+	advance_buffer_pointer(bufferPointer);
 	return get_long_from_hex(*bufferPointer);
 }
 
 uint8_t parser_get_byte_hex(char** bufferPointer) {
-	*bufferPointer = *bufferPointer + strlen(*bufferPointer) + 1;
+	advance_buffer_pointer(bufferPointer);
 	return get_byte_from_hex(*bufferPointer);
 }
 
 char* parser_get_string(char** bufferPointer) {
-	*bufferPointer = *bufferPointer + strlen(*bufferPointer) + 1;
+	advance_buffer_pointer(bufferPointer);
 	return *bufferPointer;
 }
 

@@ -88,11 +88,22 @@ void handle_command(char* commandBuffer) {
 		uart_writeln_formatted("Anim step   : %02X", anim_get_step());
 		uart_writeln_formatted("Current slot: %02X", persistence_get_current_slot());
 	}
-	else if (strcmp(commandBuffer, "RENAME") == 0) {
+	else if (strcmp(commandBuffer, "BT_SETNAME") == 0) {
 		char* name = parser_get_string(&commandBuffer);
-
-		uart_writeln_formatted("Renaming device: %s", name);
-		bt_rename_device(name);
+		bt_set_device_name(name);
+	}
+	else if (strcmp(commandBuffer, "BT_GETNAME") == 0) {
+		bt_get_device_name();
+	}
+	else if (strcmp(commandBuffer, "BT_SETPASS") == 0) {
+		char* passcode = parser_get_string(&commandBuffer);
+		bt_set_passcode(passcode);
+	}
+	else if (strcmp(commandBuffer, "BT_GETPASS") == 0) {
+		bt_get_passcode();
+	}
+	else if (strcmp(commandBuffer, "BT_VERSION") == 0) {
+		bt_get_version();
 	}
 	else {
 		uart_writeln_formatted("Unknown command: %s", commandBuffer);
