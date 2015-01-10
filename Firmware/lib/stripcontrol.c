@@ -65,6 +65,10 @@ void strip_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
 		STRIP_REG_RED = 255 - red;
 		STRIP_REG_GRN = 255 - green;
 		STRIP_REG_BLU = 255 - blue;
+	} else {
+		lastRed = 255 - red;
+		lastGreen = 255 - green;
+		lastBlue = 255 - blue;
 	}
 }
 
