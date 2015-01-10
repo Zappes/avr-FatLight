@@ -6,11 +6,15 @@
  */
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <string.h>
 #include "stripcontrol.h"
 
 #include "uart.h"
 #include "util.h"
+
+uint8_t lastRed, lastGreen, lastBlue = 0;
+uint8_t enabled = 1;
 
 void strip_init() {
 	// set PWM pins to output
@@ -32,10 +36,36 @@ void strip_init() {
 	strip_set_rgb_components(0,0,0);
 }
 
+void strip_switch_off(void) {
+	enabled = 0;
+
+	lastRed = STRIP_REG_RED;
+	lastGreen = STRIP_REG_GRN;
+	lastBlue = STRIP_REG_BLU;
+
+	STRIP_REG_RED = 255;
+	STRIP_REG_GRN = 255;
+	STRIP_REG_BLU = 255;
+}
+
+void strip_switch_on(void) {
+	STRIP_REG_RED = lastRed;
+	STRIP_REG_GRN = lastGreen;
+	STRIP_REG_BLU = lastBlue;
+
+	enabled = 1;
+}
+
+uint8_t strip_is_on() {
+	return enabled;
+}
+
 void strip_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
-	STRIP_REG_RED = 255 - red;
-	STRIP_REG_GRN = 255 - green;
-	STRIP_REG_BLU = 255 - blue;
+	if(enabled) {
+		STRIP_REG_RED = 255 - red;
+		STRIP_REG_GRN = 255 - green;
+		STRIP_REG_BLU = 255 - blue;
+	}
 }
 
 void strip_set_rgb_numeric(uint32_t colVal) {

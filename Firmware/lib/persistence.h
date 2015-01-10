@@ -11,7 +11,7 @@
 #include <avr/io.h>
 
 #define PERSISTENCE_EEPROM_MAGIC	0x1601
-#define PERSISTENCE_NUM_SLOTS			3
+#define PERSISTENCE_NUM_SLOTS			2
 
 typedef struct {
   uint16_t magic;

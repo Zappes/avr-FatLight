@@ -1,6 +1,12 @@
 /*
  * buttons.h
  *
+ * This firmware supports three buttons connected to the pins PC0-PC2. Internal pullups are
+ * enabled, so pressing a button must pull the corresponding line LOW.
+ *
+ * PC0/PC1 are used to load the stored profiles 0 and 1 respectively. PC2 toggles between
+ * enabled and disabled state of the entire strip.
+ *
  *  Created on: 07.01.2015
  *      Author: zaphod
  */

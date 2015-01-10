@@ -23,6 +23,9 @@
 #define STRIP_REG_BLU	OCR2B
 
 void strip_init(void);
+void strip_switch_off(void);
+void strip_switch_on(void);
+uint8_t strip_is_on(void);
 void strip_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue);
 void strip_set_rgb_numeric(uint32_t colVal);
 void strip_set_rgb_hex(char* color);
