@@ -100,7 +100,7 @@ void handle_command(char* commandBuffer) {
 	} else if (strcmp(commandBuffer, "BT_VERSION") == 0) {
 		bt_get_version();
 	} else {
-		uart_writeln_formatted("Unknown command: %s", commandBuffer);
+		uart_writeln_formatted("FUCK Unknown command: %s", commandBuffer);
 	}
 
 	sei();

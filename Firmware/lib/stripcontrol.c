@@ -25,14 +25,14 @@ void strip_init() {
 	TCCR0A |=
 			_BV(
 					COM0A0) | _BV(COM0A1) | _BV(COM0B0) | _BV(COM0B1) | _BV(WGM00) | _BV(WGM01);
-	// prescaler set to clk/8 -> 8 khz pwm frequency
-	TCCR0B |= _BV(CS01);
+	// prescaler set to clk/64 -> 1 khz pwm frequency
+	TCCR0B |= (_BV(CS01) | _BV(CS00));
 
 	// timer 2 is used for blue pwm.
 	// fast pwm, inverted output on both pins
 	TCCR2A |= _BV(COM2B0) | _BV(COM2B1) | _BV(WGM20) | _BV(WGM21);
-	// prescaler set to clk/8 -> 8 khz pwm frequency
-	TCCR2B |= _BV(CS21);
+	// prescaler set to clk/64 -> 1 khz pwm frequency
+	TCCR2B |= (_BV(CS21) | _BV(CS00));
 
 	// turn off the strip
 	strip_set_rgb_numeric(0);
