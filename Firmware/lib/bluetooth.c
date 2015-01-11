@@ -24,23 +24,33 @@ void bt_init(void) {
 void handle_bt_result(char* commandBuffer) {
 
 	if(strcmp("OK", commandBuffer) == 0 || strcmp("FAIL", commandBuffer) == 0 || strncmp("ERROR", commandBuffer, 5) == 0) {
+		char* result = (strcmp("OK", commandBuffer) == 0) ? "YEAH" : "FUCK";
+
 		BT_PORT &= ~_BV(BT_KEY);
 
 		_delay_ms(BT_MODESWITCH_DELAY_MS);
 
 		if(resultBuffer[0] != 0) {
-			uart_writeln_formatted("%s: %s", commandBuffer, resultBuffer);
+			uart_writeln_formatted("%s %s", result, resultBuffer);
 			resultBuffer[0] = 0;
 		}
 		else {
-			uart_writeln_formatted("BT: %s", commandBuffer);
+			uart_writeln_formatted("%s %s", result, commandBuffer);
 		}
 
 		uart_set_callback(defaultCallback);
 	}
 	else
 	{
-		strncpy(resultBuffer, commandBuffer, BT_RESULTBUFFER_SIZE);
+		// the results start with a pesky + - we strip that. if there should be more, we strip them all. there probably
+		// aren't more, but what the fuck. i have 32k of ram on that chip, and i can throw in a while loop if i want to.
+		// just for lulz.
+		char* p = commandBuffer;
+		while(*p == '+') {
+			p++;
+		}
+
+		strncpy(resultBuffer, p, BT_RESULTBUFFER_SIZE);
 	}
 }
 

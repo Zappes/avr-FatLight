@@ -22,7 +22,9 @@ void strip_init() {
 
 	// timer 0 is used for red/green pwm.
 	// fast pwm, inverted output on both pins
-	TCCR0A |= _BV(COM0A0) | _BV(COM0A1) | _BV(COM0B0) | _BV(COM0B1) | _BV(WGM00) | _BV(WGM01);
+	TCCR0A |=
+			_BV(
+					COM0A0) | _BV(COM0A1) | _BV(COM0B0) | _BV(COM0B1) | _BV(WGM00) | _BV(WGM01);
 	// prescaler set to clk/8 -> 8 khz pwm frequency
 	TCCR0B |= _BV(CS01);
 
@@ -33,15 +35,11 @@ void strip_init() {
 	TCCR2B |= _BV(CS21);
 
 	// turn off the strip
-	strip_set_rgb_components(0,0,0);
+	strip_set_rgb_numeric(0);
 }
 
 void strip_switch_off(void) {
 	enabled = 0;
-
-	lastRed = STRIP_REG_RED;
-	lastGreen = STRIP_REG_GRN;
-	lastBlue = STRIP_REG_BLU;
 
 	STRIP_REG_RED = 255;
 	STRIP_REG_GRN = 255;
@@ -61,19 +59,19 @@ uint8_t strip_is_on() {
 }
 
 void strip_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue) {
-	if(enabled) {
-		STRIP_REG_RED = 255 - red;
-		STRIP_REG_GRN = 255 - green;
-		STRIP_REG_BLU = 255 - blue;
-	} else {
-		lastRed = 255 - red;
-		lastGreen = 255 - green;
-		lastBlue = 255 - blue;
+	lastRed = 255 - red;
+	lastGreen = 255 - green;
+	lastBlue = 255 - blue;
+
+	if (enabled) {
+		STRIP_REG_RED = lastRed;
+		STRIP_REG_GRN = lastGreen;
+		STRIP_REG_BLU = lastBlue;
 	}
 }
 
 void strip_set_rgb_numeric(uint32_t colVal) {
-	uint8_t r,g,b;
+	uint8_t r, g, b;
 	get_components_from_numeric(colVal, &r, &g, &b);
 	strip_set_rgb_components(r, g, b);
 }
