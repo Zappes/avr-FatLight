@@ -12,7 +12,7 @@
 #include <avr/eeprom.h>
 
 FatLightPersistenceHeader persHeader = {0,0};
-FatLightPersistenceData persData = {0,0,0,0,1};
+FatLightPersistenceData persData = {0,0,0,0,1,0xFF};
 
 void persistence_restore(uint8_t slot) {
 	if(slot >= PERSISTENCE_NUM_SLOTS)
@@ -27,12 +27,13 @@ void persistence_restore(uint8_t slot) {
 		anim_set_delay(persData.delay);
 		anim_set_mode(persData.mode);
 		anim_set_rgb_numeric(persData.rgb);
+		anim_set_cap(persData.cap);
 	}
 	else {
 		anim_set_step(1);
 		anim_set_delay(0);
 		anim_set_mode(ANIM_MODE_SET);
-		anim_set_rgb_numeric(0);
+		anim_set_cap(0xFF);
 	}
 
 	if(slot != persHeader.slot) {
@@ -53,14 +54,16 @@ void persistence_persist(uint8_t slot) {
 	uint8_t delay = anim_get_delay();
 	uint8_t mode = anim_get_mode();
 	uint8_t step = anim_get_step();
+	uint8_t cap = anim_get_cap();
 
 	// only persist if it differs from the last read state
-	if(rgb != persData.rgb || delay != persData.delay || mode != persData.mode || step != persData.step) {
+	if(rgb != persData.rgb || delay != persData.delay || mode != persData.mode || step != persData.step || cap != persData.cap) {
 		persData.magic = PERSISTENCE_EEPROM_MAGIC;
 		persData.rgb = rgb;
 		persData.mode = mode;
 		persData.delay = delay;
 		persData.step = step;
+		persData.cap = cap;
 
 		cli();
 		eeprom_write_block((void*)&persData, (void*)(sizeof(persHeader) + (slot * sizeof(persData))), sizeof(persData));

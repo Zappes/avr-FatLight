@@ -60,6 +60,12 @@ void handle_command(char* commandBuffer) {
 		uart_writeln_formatted("YEAH DELAY:%02X", delay);
 
 		anim_set_delay(delay);
+	} else if (strcmp(commandBuffer, "CAP") == 0) {
+		uint8_t cap = parser_get_byte_hex(&commandBuffer);
+
+		uart_writeln_formatted("YEAH CAP:%02X", cap);
+
+		anim_set_cap(cap);
 	} else if (strcmp(commandBuffer, "STORE") == 0) {
 		uint8_t slot = parser_get_byte_hex(&commandBuffer);
 
@@ -85,6 +91,7 @@ void handle_command(char* commandBuffer) {
 		uart_write_formatted(" MODE:%02X", anim_get_mode());
 		uart_write_formatted(" DELAY:%02X", anim_get_delay());
 		uart_write_formatted(" STEP:%02X", anim_get_step());
+		uart_write_formatted(" CAP:%02X", anim_get_cap());
 		uart_write_formatted(" SLOT:%02X", persistence_get_current_slot());
 		uart_writeln_formatted(" ACTIVE:%02X", strip_is_on());
 	} else if (strcmp(commandBuffer, "BT_SETNAME") == 0) {

@@ -19,9 +19,9 @@
 #define BUTTONS_DDR		DDRC
 #define BUTTONS_INP 	PINC
 #define BUTTONS_PORT 	PORTC
-#define BUTTONS_BUT0	PC0
-#define BUTTONS_BUT1	PC1
-#define BUTTONS_BUT2	PC2
+#define BUTTONS_BUT0	PC3
+#define BUTTONS_BUT1	PC4
+#define BUTTONS_BUT2	PC5
 
 void buttons_init(void);
 void buttons_process(void);

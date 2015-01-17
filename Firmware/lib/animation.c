@@ -18,6 +18,7 @@ volatile uint8_t current_r, current_g, current_b = 0;
 uint8_t anim_mode = ANIM_MODE_SET;
 uint8_t anim_delay = 0;
 uint8_t anim_step = 0;
+uint8_t anim_cap = 0xFF;
 
 void anim_init(void) {
 	// Timer 1 is used for the animation loop
@@ -43,6 +44,14 @@ void anim_set_delay(uint8_t delay) {
 
 uint8_t anim_get_delay(void) {
 	return anim_delay;
+}
+
+void anim_set_cap(uint8_t delay) {
+	anim_cap = delay;
+}
+
+uint8_t anim_get_cap(void) {
+	return anim_cap;
 }
 
 void anim_set_step(uint8_t step) {
@@ -119,6 +128,10 @@ uint8_t fade_to_target(volatile uint8_t* variable, const uint8_t target) {
 	return 1;
 }
 
+uint8_t random_component() {
+	return (rand() / (RAND_MAX / anim_cap + 1)) & 0xFF;
+}
+
 /*
  * This routine is called with a frequency of 50Hz. It controls the animations for the
  * LED strip.
@@ -139,7 +152,7 @@ ISR(TIMER1_OVF_vect) {
 			strip_set_rgb_components(current_r, current_g, current_b);
 		} else if (anim_mode == ANIM_MODE_DISCO) {
 			// no fading occurred, so we have reached the target color and need a new one
-			anim_set_rgb_components(rand() & 0xFF, rand() & 0xFF, rand() & 0xFF);
+			anim_set_rgb_components(random_component(), random_component(), random_component());
 		}
 	} else {
 		anim_counter--;
