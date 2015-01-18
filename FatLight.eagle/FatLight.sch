@@ -64,7 +64,7 @@
 <library name="Zap-Mikrocontroller">
 <packages>
 <package name="DIP254P762X457-28">
-<pad name="1" x="-7.62" y="33.02" drill="0.9906" shape="square"/>
+<pad name="1" x="-7.62" y="33.02" drill="0.9906"/>
 <pad name="2" x="-7.62" y="30.48" drill="0.9906"/>
 <pad name="3" x="-7.62" y="27.94" drill="0.9906"/>
 <pad name="4" x="-7.62" y="25.4" drill="0.9906"/>
@@ -14005,23 +14005,23 @@ Distributor: Bürklin 71F972&lt;br&gt;</description>
 <description>&lt;b&gt;Step-Down-Modul&lt;/b&gt;
 &lt;p&gt;Step-Down-Modul vom Ebay-Chinesen. Geht von 4,5V-28V auf 0,8V-20V, maximal 3A.&lt;/p&gt;
 &lt;p&gt;Die Pins sind nicht 100% passend im Raster, lassen sich aber so hinbiegen, dass das nicht auffällt.&lt;/p&gt;</description>
-<wire x1="-10.5" y1="8" x2="10.5" y2="8" width="0.127" layer="21"/>
-<wire x1="10.5" y1="8" x2="10.5" y2="-8" width="0.127" layer="21"/>
-<wire x1="10.5" y1="-8" x2="-10.5" y2="-8" width="0.127" layer="21"/>
-<wire x1="-10.5" y1="-8" x2="-10.5" y2="8" width="0.127" layer="21"/>
+<wire x1="-11.21" y1="8.4" x2="11.21" y2="8.4" width="0.127" layer="21"/>
+<wire x1="11.21" y1="8.4" x2="11.21" y2="-8.4" width="0.127" layer="21"/>
+<wire x1="11.21" y1="-8.4" x2="-11.21" y2="-8.4" width="0.127" layer="21"/>
+<wire x1="-11.21" y1="-8.4" x2="-11.21" y2="8.4" width="0.127" layer="21"/>
 <text x="-8.89" y="0" size="1.27" layer="21">In</text>
 <text x="6.35" y="0" size="1.27" layer="21">Out</text>
-<pad name="IN-1" x="-8.89" y="6.35" drill="1"/>
-<pad name="IN-2" x="-8.89" y="3.81" drill="1"/>
-<pad name="IN+2" x="-8.89" y="-6.35" drill="1"/>
-<pad name="IN+1" x="-8.89" y="-3.81" drill="1"/>
-<pad name="OUT-1" x="8.89" y="6.35" drill="1"/>
-<pad name="OUT-2" x="8.89" y="3.81" drill="1"/>
-<pad name="OUT+1" x="8.89" y="-3.81" drill="1"/>
-<pad name="OUT+2" x="8.89" y="-6.35" drill="1"/>
+<pad name="IN-1" x="-9.25" y="6.35" drill="1"/>
+<pad name="IN-2" x="-9.25" y="3.81" drill="1"/>
+<pad name="IN+2" x="-9.25" y="-6.35" drill="1" shape="square"/>
+<pad name="IN+1" x="-9.25" y="-3.81" drill="1" shape="square"/>
+<pad name="OUT-1" x="9.25" y="6.35" drill="1"/>
+<pad name="OUT-2" x="9.25" y="3.81" drill="1"/>
+<pad name="OUT+1" x="9.25" y="-3.81" drill="1" shape="square"/>
+<pad name="OUT+2" x="9.25" y="-6.35" drill="1" shape="square"/>
 <text x="-10.16" y="8.89" size="1.27" layer="25">&gt;NAME</text>
 <text x="3.81" y="-10.16" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="-10.5" y1="-8" x2="10.5" y2="8" layer="39"/>
+<rectangle x1="-11.21" y1="-8.4" x2="11.21" y2="8.4" layer="39"/>
 </package>
 </packages>
 <symbols>
@@ -14046,8 +14046,8 @@ Distributor: Bürklin 71F972&lt;br&gt;</description>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="STEP-DOWN" prefix="SD">
-<description>&lt;b&gt;Step-Down-Modul&lt;/b&gt;
+<deviceset name="D-SUN-STEPDOWN" prefix="SD">
+<description>&lt;b&gt;Step-Down-Modul (D-Sun)&lt;/b&gt;
 &lt;p&gt;Step-Down-Modul vom Ebay-Chinesen. Geht von 4,5V-28V auf 0,8V-20V, maximal 3A.&lt;/p&gt;
 &lt;p&gt;Die Pins sind nicht 100% passend im Raster, lassen sich aber so hinbiegen, dass das nicht auffällt.&lt;/p&gt;</description>
 <gates>
@@ -14575,7 +14575,7 @@ Low profile connectors, straight&lt;p&gt;
 <part name="STRIP" library="con-amp" deviceset="FLOP-4W" device=""/>
 <part name="P+4" library="supply1" deviceset="+12V" device=""/>
 <part name="FRAME3" library="frames" deviceset="A4L-LOC" device="" value="Power"/>
-<part name="SD1" library="Zap-Powerconverters" deviceset="STEP-DOWN" device=""/>
+<part name="SD1" library="Zap-Powerconverters" deviceset="D-SUN-STEPDOWN" device=""/>
 <part name="J1" library="con-jack" deviceset="JACK-PLUG" device="0" value="12V"/>
 <part name="C5" library="rcl" deviceset="CPOL-EU" device="E2.5-5" value="100µF"/>
 <part name="P+5" library="supply1" deviceset="+5V" device=""/>

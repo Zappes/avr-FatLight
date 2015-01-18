@@ -356,10 +356,12 @@ UsedLibrary="/opt/eagle-7.1.0/lbr/Zappes/Zap-Verbogene Teile.lbr"
 UsedLibrary="/home/zaphod/Development/Tools/Eagle-Addon/Molex_By_element14_Batch_1.lbr"
 UsedLibrary="/home/zaphod/Development/Tools/Eagle-Addon/molex-kk.lbr"
 UsedLibrary="/opt/eagle-7.2.0/lbr/Zaphod/ZAP-Wireless.lbr"
+UsedLibrary="/opt/eagle-7.2.0/lbr/Zaphod/Zap-Powerconverters.lbr"
+UsedLibrary="/opt/eagle-7.2.0/lbr/Zaphod/Zap-Mikrocontroller.lbr"
 
 [Win_1]
 Type="Control Panel"
-Loc="1721 125 2320 868"
+Loc="1721 125 2505 868"
 State=2
 Number=0
 
