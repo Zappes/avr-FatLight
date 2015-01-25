@@ -23,8 +23,8 @@ uint8_t anim_get_mode(void);
 void anim_set_step(uint8_t step);
 uint8_t anim_get_step(void);
 
-void anim_set_cap(uint8_t step);
-uint8_t anim_get_cap(void);
+void anim_set_level(uint8_t step);
+uint8_t anim_get_level(void);
 
 
 void anim_set_rgb_components(uint8_t red, uint8_t green, uint8_t blue);

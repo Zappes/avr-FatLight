@@ -12,13 +12,14 @@
 #include "util.h"
 #include "stripcontrol.h"
 #include "animation.h"
+#include "color.h"
 
 uint8_t target_r, target_g, target_b = 0;
 volatile uint8_t current_r, current_g, current_b = 0;
 uint8_t anim_mode = ANIM_MODE_SET;
 uint8_t anim_delay = 0;
 uint8_t anim_step = 0;
-uint8_t anim_cap = 0xFF;
+uint8_t anim_level = 0xFF;
 
 void anim_init(void) {
 	// Timer 1 is used for the animation loop
@@ -46,12 +47,12 @@ uint8_t anim_get_delay(void) {
 	return anim_delay;
 }
 
-void anim_set_cap(uint8_t delay) {
-	anim_cap = delay;
+void anim_set_level(uint8_t delay) {
+	anim_level = delay;
 }
 
-uint8_t anim_get_cap(void) {
-	return anim_cap;
+uint8_t anim_get_level(void) {
+	return anim_level;
 }
 
 void anim_set_step(uint8_t step) {
@@ -128,8 +129,8 @@ uint8_t fade_to_target(volatile uint8_t* variable, const uint8_t target) {
 	return 1;
 }
 
-uint8_t random_component() {
-	return (rand() / (RAND_MAX / anim_cap + 1)) & 0xFF;
+uint8_t random_component(uint8_t cap) {
+	return (rand() / (RAND_MAX / cap + 1)) & 0xFF;
 }
 
 /*
@@ -152,7 +153,10 @@ ISR(TIMER1_OVF_vect) {
 			strip_set_rgb_components(current_r, current_g, current_b);
 		} else if (anim_mode == ANIM_MODE_DISCO) {
 			// no fading occurred, so we have reached the target color and need a new one
-			anim_set_rgb_components(random_component(), random_component(), random_component());
+			uint8_t r,g,b;
+
+			hslToRgb(random_component(255), random_component(255), anim_level, &r, &g ,&b);
+			anim_set_rgb_components(r,g,b);
 		}
 	} else {
 		anim_counter--;
