@@ -15,3 +15,6 @@ Make sure that the pinout of your Bluetooth module matches the pinout on the boa
 
 ![Image of the FatLight prototype](https://github.com/Zappes/avr-FatLight/blob/master/Doc/FatLight-Breadboard.jpg?raw=true)
 
+Where can I learn more?
+-----------------------
+[There's a playlist on Youtube.](https://www.youtube.com/playlist?list=PLFFlJlvZ--Pn7IzDO5DFNhvppb0ZImLEq) It's in German, I'm afraid.
