@@ -14031,18 +14031,18 @@ Low profile connectors, straight&lt;p&gt;
 <text x="15.24" y="-1.905" size="1.27" layer="21" align="bottom-right">+5V</text>
 <text x="15.24" y="-4.445" size="1.27" layer="21" align="bottom-right">+3.3V</text>
 <text x="15.24" y="-6.985" size="1.27" layer="21" align="bottom-right">GND</text>
-<pad name="KEY1" x="-16.51" y="6.35" drill="1"/>
-<pad name="+5V1" x="-16.51" y="3.81" drill="1"/>
-<pad name="GND1" x="-16.51" y="1.27" drill="1"/>
-<pad name="TXD1" x="-16.51" y="-1.27" drill="1"/>
-<pad name="RXD1" x="-16.51" y="-3.81" drill="1"/>
-<pad name="STATE" x="-16.51" y="-6.35" drill="1"/>
-<text x="-15.24" y="5.715" size="1.27" layer="21">Key</text>
-<text x="-15.24" y="3.175" size="1.27" layer="21">+5V</text>
-<text x="-15.24" y="0.635" size="1.27" layer="21">GND</text>
-<text x="-15.24" y="-1.905" size="1.27" layer="21">TXD</text>
-<text x="-15.24" y="-4.445" size="1.27" layer="21">RXD</text>
-<text x="-15.24" y="-6.985" size="1.27" layer="21">State</text>
+<pad name="KEY1" x="-16.51" y="-6.35" drill="1"/>
+<pad name="+5V1" x="-16.51" y="-3.81" drill="1"/>
+<pad name="GND1" x="-16.51" y="-1.27" drill="1"/>
+<pad name="TXD1" x="-16.51" y="1.27" drill="1"/>
+<pad name="RXD1" x="-16.51" y="3.81" drill="1"/>
+<pad name="STATE" x="-16.51" y="6.35" drill="1"/>
+<text x="-15.24" y="-6.985" size="1.27" layer="21">Key</text>
+<text x="-15.24" y="-4.445" size="1.27" layer="21">+5V</text>
+<text x="-15.24" y="-1.905" size="1.27" layer="21">GND</text>
+<text x="-15.24" y="0.635" size="1.27" layer="21">TXD</text>
+<text x="-15.24" y="3.175" size="1.27" layer="21">RXD</text>
+<text x="-15.24" y="5.715" size="1.27" layer="21">State</text>
 </package>
 </packages>
 <symbols>
