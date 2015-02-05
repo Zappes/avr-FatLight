@@ -155,7 +155,7 @@ ISR(TIMER1_OVF_vect) {
 			// no fading occurred, so we have reached the target color and need a new one
 			uint8_t r,g,b;
 
-			hslToRgb(random_component(255), random_component(255), anim_level, &r, &g ,&b);
+			hslToRgb(random_component(255), random_component(255), anim_level > 0 ? anim_level : random_component(255), &r, &g ,&b);
 			anim_set_rgb_components(r,g,b);
 		}
 	} else {

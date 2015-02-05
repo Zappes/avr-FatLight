@@ -17,10 +17,10 @@ uint8_t lastButton = 0xFF;
 void buttons_init(void) {
 	// this is not strictly required, but at least it's nicely explicit:
 	// set buttons as input pins
-	BUTTONS_DDR &= ~(_BV(BUTTONS_BUT0) | _BV(BUTTONS_BUT1) | _BV(BUTTONS_BUT2));
+	BUTTONS_DDR &= ~(_BV(BUTTONS_BUT0) | _BV(BUTTONS_BUT1) | _BV(BUTTONS_BUT2) | _BV(BUTTONS_BUT3) | _BV(BUTTONS_BUT4) | _BV(BUTTONS_BUT5));
 
 	// enable pull-ups
-	BUTTONS_PORT |= (_BV(BUTTONS_BUT0) | _BV(BUTTONS_BUT1) | _BV(BUTTONS_BUT2));
+	BUTTONS_PORT |= (_BV(BUTTONS_BUT0) | _BV(BUTTONS_BUT1) | _BV(BUTTONS_BUT2) | _BV(BUTTONS_BUT3) | _BV(BUTTONS_BUT4) | _BV(BUTTONS_BUT5));
 }
 
 
@@ -28,34 +28,8 @@ uint8_t pressed(uint8_t button) {
 	return (!(BUTTONS_INP & _BV(button)));
 }
 
-uint8_t power_toggled() {
-	static uint8_t lastState = 0;
-
-	// this debouncing algorithm is fucking primitive, but yes ... it works most of the
-	// time, and that's good enough here.
-	if(pressed(BUTTONS_BUT2)) {
-		_delay_ms(10);
-
-		if(pressed(BUTTONS_BUT2)) {
-			if(lastState == 0) {
-				lastState = 1;
-				return 1;
-			} else {
-				return 0;
-			}
-		}
-	} else {
-		_delay_ms(10);
-		if(!pressed(BUTTONS_BUT2)) {
-			lastState = 0;
-			return 0;
-		}
-	}
-
-	return 0;
-}
-
 void buttons_process(void) {
+	// wrote this in a hurry, should really be cleaned up ...
 	if(pressed(BUTTONS_BUT0) && lastButton != 0) {
 		persistence_restore(0);
 		lastButton = 0;
@@ -66,14 +40,25 @@ void buttons_process(void) {
 		lastButton = 1;
 		uart_writeln_string("Loaded settings from slot: 01");
 	}
-	else if(power_toggled()) {
-		if(strip_is_on()) {
-			strip_switch_off();
-			uart_writeln_string("Strip switched off");
-		} else {
-			strip_switch_on();
-			uart_writeln_string("Strip switched on");
-		}
+	else if(pressed(BUTTONS_BUT2) && lastButton != 2) {
+		persistence_restore(2);
+		lastButton = 2;
+		uart_writeln_string("Loaded settings from slot: 02");
+	}
+	else if(pressed(BUTTONS_BUT3) && lastButton != 3) {
+		persistence_restore(3);
+		lastButton = 3;
+		uart_writeln_string("Loaded settings from slot: 03");
+	}
+	else if(pressed(BUTTONS_BUT4) && lastButton != 4) {
+		persistence_restore(4);
+		lastButton = 4;
+		uart_writeln_string("Loaded settings from slot: 04");
+	}
+	else if(pressed(BUTTONS_BUT5) && lastButton != 5) {
+		persistence_restore(5);
+		lastButton = 5;
+		uart_writeln_string("Loaded settings from slot: 05");
 	}
 }
 
